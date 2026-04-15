@@ -80,41 +80,41 @@ export default function AutoBuilder() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto pb-20">
-      <section className="bg-card p-8 rounded-2xl border shadow-sm space-y-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-5">
-          <Sparkles className="w-32 h-32" />
+    <div className="space-y-12 max-w-4xl mx-auto pb-20">
+      <section className="bg-card p-10 rounded-[2rem] border-2 shadow-xl shadow-primary/5 space-y-10 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
+          <Sparkles className="w-64 h-64" />
         </div>
         
-        <div className="space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Auto Session Builder</h2>
-          <p className="text-muted-foreground">Select your criteria and let us build the perfect session for you.</p>
+        <div className="space-y-3 relative z-10">
+          <h2 className="text-4xl font-black tracking-tight text-foreground">Auto Session Builder</h2>
+          <p className="text-lg text-muted-foreground font-medium">Select your criteria and let us build the perfect session for you.</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-3">
-            <Label className="text-base font-semibold">Number of Players</Label>
-            <div className="flex items-center gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
+          <div className="space-y-4">
+            <Label className="text-sm uppercase font-bold tracking-widest text-primary/60 ml-1">Number of Players</Label>
+            <div className="flex items-center gap-4 bg-muted/30 p-2 rounded-2xl border-2 border-transparent focus-within:border-primary/20 transition-all">
                <Input 
                 type="number" 
                 value={playerCount} 
                 onChange={(e) => setPlayerCount(parseInt(e.target.value))}
                 min={1} max={30}
-                className="text-lg h-12"
+                className="text-2xl font-black h-14 w-24 bg-background border-none shadow-sm text-center rounded-xl"
               />
-              <span className="text-muted-foreground whitespace-nowrap">Players on pitch</span>
+              <span className="text-muted-foreground font-bold">Players on the pitch</span>
             </div>
           </div>
           
-          <div className="space-y-3">
-            <Label className="text-base font-semibold">Session Length (Drills)</Label>
-            <div className="flex gap-2">
+          <div className="space-y-4">
+            <Label className="text-sm uppercase font-bold tracking-widest text-primary/60 ml-1">Session Length (Drills)</Label>
+            <div className="flex gap-2 bg-muted/30 p-2 rounded-2xl">
               {[1, 2, 3, 4, 5].map(n => (
                 <Button 
                   key={n} 
-                  variant={numDrills === n ? "default" : "outline"}
+                  variant={numDrills === n ? "default" : "ghost"}
                   onClick={() => setNumDrills(n)}
-                  className="flex-1 h-12 text-lg"
+                  className={`flex-1 h-14 text-xl font-bold rounded-xl transition-all ${numDrills === n ? "shadow-lg shadow-primary/20 scale-105" : "hover:bg-background/50"}`}
                 >
                   {n}
                 </Button>
@@ -123,14 +123,14 @@ export default function AutoBuilder() {
           </div>
         </div>
 
-        <div className="space-y-3">
-          <Label className="text-base font-semibold">Target Themes (Select up to 2)</Label>
-          <div className="flex flex-wrap gap-2 p-4 border rounded-xl bg-muted/30">
+        <div className="space-y-4 relative z-10">
+          <Label className="text-sm uppercase font-bold tracking-widest text-primary/60 ml-1">Target Themes (Select up to 2)</Label>
+          <div className="flex flex-wrap gap-2.5 p-6 border-2 border-dashed rounded-[1.5rem] bg-muted/10">
             {tags.map(tag => (
               <Badge 
                 key={tag}
                 variant={selectedTags.includes(tag) ? "default" : "secondary"}
-                className="cursor-pointer hover:scale-105 transition-transform px-3 py-1 text-sm"
+                className={`cursor-pointer transition-all px-4 py-2 text-sm font-bold rounded-full ${selectedTags.includes(tag) ? "scale-105 shadow-md" : "hover:bg-muted-foreground/10 opacity-70 hover:opacity-100"}`}
                 onClick={() => toggleTag(tag)}
               >
                 {tag}
@@ -139,7 +139,7 @@ export default function AutoBuilder() {
           </div>
         </div>
 
-        <Button onClick={handleGenerate} size="lg" className="w-full h-14 text-xl shadow-lg shadow-primary/20">
+        <Button onClick={handleGenerate} size="lg" className="w-full h-16 text-2xl font-black rounded-2xl shadow-2xl shadow-primary/20 hover:scale-[1.01] active:scale-[0.99] transition-all">
           Generate Session Plan
         </Button>
       </section>
