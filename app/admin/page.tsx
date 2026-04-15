@@ -5,7 +5,6 @@ import { getDrills } from "@/lib/drills";
 import { Drill } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, AlertCircle, Loader2, Download, Image as ImageIcon } from "lucide-react";
 import JSZip from "jszip";
 
@@ -148,7 +147,7 @@ export default function AdminPage() {
           </Button>
 
           <div className="bg-black text-xs p-4 rounded-lg h-40 overflow-y-auto font-mono text-green-400">
-            {logs.length === 0 && <span className="text-gray-500">// Waiting for input...</span>}
+            {logs.length === 0 && <span className="text-gray-500">{/* Waiting for input... */}</span>}
             {logs.map((log, i) => (
               <div key={i}>{log}</div>
             ))}

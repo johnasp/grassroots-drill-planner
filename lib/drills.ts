@@ -17,8 +17,7 @@ export function generateSession(
   allDrills: Drill[],
   playerCount: number,
   numDrills: number,
-  selectedTags: string[],
-  ageGroup?: string
+  selectedTags: string[]
 ): Drill[] {
   // Simple filtering logic
   let filtered = allDrills;

@@ -1,6 +1,6 @@
-import React from 'react';
+  import React from 'react';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
-import { Session, Drill } from '@/lib/types';
+import { Session } from '@/lib/types';
 
 const styles = StyleSheet.create({
   page: {
