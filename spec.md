@@ -100,3 +100,15 @@ Start coding with the main layout and Auto Session Builder page.
 
 ---
 
+## TO DO & FUTURE FEATURES
+
+**Technical**
+
+* Move data from JSON to Supabase database 
+* Get videos hosted somewhere
+
+**Features**
+
+* Post drill comments and notes section for training plans, give coaches ability to review what went well, what didnt and what they'd change for next session.
+* Give the user the ability to rename and edit sessions
+* In auto builder, the number of players input must be respected in the results.  For example if user requested drills for 12 players, it must return drills for either the exact number or one above or one below.  EG. Drills returned for 11, 12 or 13 players

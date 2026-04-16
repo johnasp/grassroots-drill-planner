@@ -41,6 +41,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { SessionPDF } from "@/components/SessionPDF";
+import { DrillVideoPlayer } from "@/components/DrillVideoPlayer";
 import { useFavorites } from "@/hooks/useFavorites";
 import {
   Dialog,
@@ -399,11 +400,9 @@ export default function ManualBuilder() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0">
           {viewingDrill && (
             <>
-              <div className="aspect-video bg-black relative">
-                <video 
+              <div className="aspect-video">
+                <DrillVideoPlayer 
                   src={`/videos/${viewingDrill.video_file_path.split('/').pop()}`}
-                  controls
-                  className="w-full h-full"
                   autoPlay
                 />
               </div>

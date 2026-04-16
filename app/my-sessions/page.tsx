@@ -20,6 +20,7 @@ import {
 import Link from "next/link";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { SessionPDF } from "@/components/SessionPDF";
+import { DrillVideoPlayer } from "@/components/DrillVideoPlayer";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
@@ -272,11 +273,12 @@ export default function MySessions() {
                               <Play className="w-12 h-12 text-muted-foreground/20" />
                             </div>
                           )}
-                          <video 
+                          <DrillVideoPlayer 
                             src={`/videos/${drill.video_file_path.split('/').pop()}`}
-                            controls
+                            autoPlay={false}
                             className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity"
                           />
+
                       </div>
                       <div className="p-8 space-y-6">
                          <div className="grid grid-cols-2 gap-4">
