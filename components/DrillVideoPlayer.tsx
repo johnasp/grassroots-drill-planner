@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Gauge, Check } from "lucide-react";
+import { Gauge, Check, Repeat } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface DrillVideoPlayerProps {
@@ -14,6 +14,7 @@ interface DrillVideoPlayerProps {
 export function DrillVideoPlayer({ src, poster, autoPlay = true, className = "" }: DrillVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [speed, setSpeed] = useState(1);
+  const [isLooping, setIsLooping] = useState(false);
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
 
   const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -41,14 +42,31 @@ export function DrillVideoPlayer({ src, poster, autoPlay = true, className = "" 
         poster={poster}
         controls
         autoPlay={autoPlay}
+        loop={isLooping}
         className="w-full h-full"
         onPlay={() => {
           if (videoRef.current) videoRef.current.playbackRate = speed;
         }}
       />
       
-      {/* Speed Control Overlay */}
-      <div className="absolute top-4 right-4 z-20">
+      {/* Controls Overlay */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        {/* Loop Toggle */}
+        <Button
+          variant="secondary"
+          size="sm"
+          className={`h-9 w-9 p-0 font-black border-none backdrop-blur-md shadow-xl transition-colors ${
+            isLooping 
+              ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+              : "bg-black/40 text-white hover:bg-black/60"
+          }`}
+          onClick={() => setIsLooping(!isLooping)}
+          title={isLooping ? "Disable Loop" : "Enable Loop"}
+        >
+          <Repeat className="w-4 h-4" />
+        </Button>
+
+        {/* Speed Control */}
         <div className="relative">
           <Button
             variant="secondary"
