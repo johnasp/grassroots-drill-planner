@@ -39,6 +39,7 @@ export default function AutoBuilder() {
   const [playerCount, setPlayerCount] = useState(12);
   const [numDrills, setNumDrills] = useState(3);
   const [session, setSession] = useState<Drill[]>([]);
+  const [generationAttempted, setGenerationAttempted] = useState(false);
   const [sessionTitle, setSessionTitle] = useState("");
   const [focusMode, setFocusMode] = useState<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -56,6 +57,7 @@ export default function AutoBuilder() {
   const handleGenerate = () => {
     const drills = generateSession(allDrills, playerCount, numDrills, selectedTags);
     setSession(drills);
+    setGenerationAttempted(true);
     setSessionTitle(`Session - ${new Date().toLocaleDateString()} - ${playerCount} Players`);
   };
 
@@ -145,6 +147,19 @@ export default function AutoBuilder() {
         </Button>
       </section>
 
+      {generationAttempted && session.length < numDrills && (
+        <div role="status" className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
+          <p className="font-bold">
+            {session.length === 0
+              ? "No drills found for " + playerCount + " players with the selected themes."
+              : "Only " + session.length + " of " + numDrills + " requested drills matched " + playerCount + " players and the selected themes."}
+          </p>
+          <p className="mt-1 text-muted-foreground">
+            We have not filled the session with drills for the wrong number of players. Try removing a theme or choosing a different player count.
+          </p>
+        </div>
+      )}
+
       {session.length > 0 && (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between border-b pb-6">
@@ -182,7 +197,7 @@ export default function AutoBuilder() {
                 </PDFDownloadLink>
               )}
 
-              <Button variant="ghost" className="h-11" onClick={() => setSession([])}>
+              <Button variant="ghost" className="h-11" onClick={() => { setSession([]); setGenerationAttempted(false); }}>
                 <RotateCcw className="w-4 h-4 mr-2"/>Reset
               </Button>
             </div>
