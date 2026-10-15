@@ -1,44 +1,42 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
+
+const STORAGE_KEY = "gdp_favorites_v1";
 
 export function useFavorites() {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("football-favorites");
-    if (saved) {
-      try {
-        setFavorites(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse favorites", e);
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        setFavorites(JSON.parse(raw));
       }
+    } catch (err) {
+      console.error("Failed to read favorites from localStorage", err);
     }
   }, []);
 
-  const toggleFavorite = (drillId: string | number, drillTitle?: string) => {
-    const idString = String(drillId);
-    const isAdding = !favorites.includes(idString);
-    const newFavorites = isAdding
-      ? [...favorites, idString]
-      : favorites.filter((id) => id !== idString);
-    
-    setFavorites(newFavorites);
-    localStorage.setItem("football-favorites", JSON.stringify(newFavorites));
-
-    if (isAdding) {
-      toast.success("Added to favorites", {
-        description: drillTitle ? `${drillTitle} has been saved.` : "Drill saved to your collection."
-      });
-    } else {
-      toast.error("Removed from favorites", {
-        description: drillTitle ? `${drillTitle} has been removed.` : "Drill removed from your collection."
-      });
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    } catch (err) {
+      console.error("Failed to write favorites to localStorage", err);
     }
-  };
+  }, [favorites]);
 
-  const isFavorite = (drillId: string | number) => favorites.includes(String(drillId));
+  function toggleFavorite(id: number | string, _title?: string) {
+    const sid = String(id);
+    setFavorites((prev) => {
+      if (prev.includes(sid)) return prev.filter((p) => p !== sid);
+      return [...prev, sid];
+    });
+  }
 
-  return { favorites, toggleFavorite, isFavorite };
+  function isFavorite(id: number | string) {
+    return favorites.includes(String(id));
+  }
+
+  return { favorites, toggleFavorite, isFavorite } as const;
 }
