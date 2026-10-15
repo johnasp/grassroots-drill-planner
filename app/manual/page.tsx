@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Drill, Session } from "@/lib/types";
-import { getDrills } from "@/lib/drills";
+import { getDrills, isDrillSuitableForPlayers } from "@/lib/drills";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -127,6 +127,7 @@ export default function ManualBuilder() {
   const [allDrills, setAllDrills] = useState<Drill[]>([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [playerCountFilter, setPlayerCountFilter] = useState<string>("All");
   const [displayLimit, setDisplayLimit] = useState(40);
   const [selectedDrills, setSelectedDrills] = useState<SelectedDrill[]>([]);
   const [sessionTitle, setSessionTitle] = useState("");
@@ -165,10 +166,12 @@ export default function ManualBuilder() {
     const matchesSearch = d.title.toLowerCase().includes(search.toLowerCase()) ||
       d.drill_tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
     
-    const matchesCategory = selectedCategory === "All" || 
+    const matchesCategory = selectedCategory === "All" ||
       d.drill_tags.some(t => t.toLowerCase().includes(selectedCategory.toLowerCase()));
+    const matchesPlayerCount = playerCountFilter === "All" ||
+      isDrillSuitableForPlayers(d, Number(playerCountFilter));
 
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesPlayerCount;
   });
 
   const visibleDrills = filteredDrills.slice(0, search ? 100 : displayLimit);
@@ -233,14 +236,33 @@ export default function ManualBuilder() {
           ))}
         </div>
 
-        <div className="flex gap-3">
-          <Input 
-            placeholder="Search drills..." 
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Input
+            placeholder="Search drills..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="bg-muted/50 border-none h-10 flex-1"
           />
+          <select
+            aria-label="Filter drills by number of players"
+            value={playerCountFilter}
+            onChange={(e) => {
+              setPlayerCountFilter(e.target.value);
+              setDisplayLimit(40);
+            }}
+            className="h-10 rounded-md border bg-background px-3 text-sm sm:w-48"
+          >
+            <option value="All">Any number of players</option>
+            {Array.from({ length: 30 }, (_, index) => index + 1).map(count => (
+              <option key={count} value={count}>{count} {count === 1 ? "player" : "players"}</option>
+            ))}
+          </select>
         </div>
+        <p className="text-xs text-muted-foreground">
+          Showing {filteredDrills.length} matching drills
+          {playerCountFilter !== "All" ? ` suitable for ${playerCountFilter} players` : ""}.
+          Drills with unknown player counts are excluded when a player count is selected.
+        </p>
 
         <div className="flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pr-2 custom-scrollbar content-start">
           {visibleDrills.map(drill => (
